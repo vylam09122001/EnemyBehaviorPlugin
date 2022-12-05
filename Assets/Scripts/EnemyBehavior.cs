@@ -7,6 +7,7 @@ public class EnemyBehavior : MonoBehaviour
 
     // Enemy Field Of View
     public float radius;
+    [Range(0,360)]
     public float angle;
 
     public GameObject playerRef;
@@ -43,7 +44,7 @@ public class EnemyBehavior : MonoBehaviour
             Transform target = rangeChecks[0].transform;
             Vector3 directionToTarget = (target.position - transform.position).normalized;
 
-            if (Vector3.Angle(transform.position, directionToTarget) < angle / 2)
+            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
                 float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
