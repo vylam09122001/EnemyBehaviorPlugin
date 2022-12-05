@@ -4,13 +4,19 @@ using UnityEngine;
 
 public class EnemyBehavior : MonoBehaviour
 {
+    public GameObject playerRef;
+
+    // Enemy Movement
+    public float speed;
+    public float stoppingDistance;
+    public float retreatDistance;
+
+    private Rigidbody rb;
 
     // Enemy Field Of View
     public float radius;
     [Range(0,360)]
     public float angle;
-
-    public GameObject playerRef;
 
     public LayerMask targetMask;
     public LayerMask obstacleMask;
@@ -21,6 +27,23 @@ public class EnemyBehavior : MonoBehaviour
     {
         playerRef = GameObject.FindGameObjectWithTag("Player");
         StartCoroutine(FOVRoutine());
+
+        rb = this.GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        if (canSeePlayer)
+        {
+            Vector3 lookVector = playerRef.transform.position - transform.position;
+            lookVector.y = transform.position.y;
+            Quaternion rot = Quaternion.LookRotation(lookVector);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1);
+
+            EnemyMovement();
+        }
+        
+
     }
 
     private IEnumerator FOVRoutine()
@@ -65,5 +88,24 @@ public class EnemyBehavior : MonoBehaviour
             canSeePlayer = false;
         }
     }
+
+    void EnemyMovement()
+    {
+        if (Vector3.Distance(transform.position, playerRef.transform.position) > stoppingDistance)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, speed * Time.deltaTime);
+        }
+        else if (Vector3.Distance(transform.position, playerRef.transform.position) < stoppingDistance && Vector3.Distance(transform.position, playerRef.transform.position) > retreatDistance)
+        {
+            transform.position = this.transform.position;
+        }
+        else if (Vector3.Distance(transform.position, playerRef.transform.position) < retreatDistance)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, -speed * Time.deltaTime);
+        }
+    }
+
+    
+
    
 }
