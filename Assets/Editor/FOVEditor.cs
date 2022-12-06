@@ -24,7 +24,7 @@ public class FOVEditor : Editor
 
         if(fov.canSeePlayer)
         {
-            Handles.color = Color.blue;
+            Handles.color = Color.green;
             Handles.DrawLine(fov.transform.position, fov.playerRef.transform.position);
         }
     }

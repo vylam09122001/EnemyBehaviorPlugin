@@ -6,20 +6,29 @@ public class EnemyBehavior : MonoBehaviour
 {
     public GameObject playerRef;
 
-    // Enemy Movement
+    [Header("Enemy Movement Settings")]
     public float speed;
     public float stoppingDistance;
     public float retreatDistance;
 
     private Rigidbody rb;
 
-    // Enemy Field Of View
+    [Header("Enemy Field Of View Settings")]
+    [Range(0, 100)] //Adjust the range/slider based on the size of your character
     public float radius;
     [Range(0,360)]
     public float angle;
 
-    public LayerMask targetMask;
-    public LayerMask obstacleMask;
+    [Header("Enemy Responding Time Settings")]
+    [Range(0, 1)] public float chasingDelay;
+    [Range(0, 1)] public float stoppingDelay;
+    [Range(0, 1)] public float retreatDelay;
+
+    [Header("Layer Masks")]
+    [Tooltip("Set Target Mask for your Player Character in order for Enemy to detect")]
+    public LayerMask targetMask; 
+    [Tooltip("Set Obstacle Mask for Obstacle Object in order to block Enemy FOV")]
+    public LayerMask obstacleMask; 
 
     public bool canSeePlayer;
 
@@ -92,22 +101,24 @@ public class EnemyBehavior : MonoBehaviour
 
     private IEnumerator EnemyMovement()
     {
-        float delay = .5f;
-        WaitForSeconds wait = new WaitForSeconds(delay);
+  
+        WaitForSeconds chasingWaitTime = new WaitForSeconds(chasingDelay);
+        WaitForSeconds stoppingWaitTime = new WaitForSeconds(stoppingDelay);
+        WaitForSeconds retreatWaitTime = new WaitForSeconds(retreatDelay);
 
         if (Vector3.Distance(transform.position, playerRef.transform.position) > stoppingDistance)
         {
-            yield return wait;
+            yield return chasingWaitTime;
             transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, speed * Time.deltaTime);
         }
         else if (Vector3.Distance(transform.position, playerRef.transform.position) < stoppingDistance && Vector3.Distance(transform.position, playerRef.transform.position) > retreatDistance)
         {
-            yield return wait;
+            yield return stoppingWaitTime;
             transform.position = this.transform.position;
         }
         else if (Vector3.Distance(transform.position, playerRef.transform.position) < retreatDistance)
         {
-            yield return wait;
+            yield return retreatWaitTime;
             transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, -speed * Time.deltaTime);
         }
 
