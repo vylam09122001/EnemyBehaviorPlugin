@@ -201,7 +201,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 326076544403131823}
-  - component: {fileID: 326076544403131816}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -224,34 +223,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &326076544403131816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 326076544403131818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9313c655f8d2c18458255300c4031ab3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerRef: {fileID: 0}
-  speed: 15
-  stoppingDistance: 5
-  retreatDistance: 7
-  radius: 9
-  angle: 139
-  chasingDelay: 0.2
-  stoppingDelay: 0.1
-  retreatDelay: 0.5
-  targetMask:
-    serializedVersion: 2
-    m_Bits: 64
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 128
-  canSeePlayer: 0
 --- !u!1 &326076544617074689
 GameObject:
   m_ObjectHideFlags: 0

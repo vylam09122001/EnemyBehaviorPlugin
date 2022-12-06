@@ -8,20 +8,21 @@ public class EnemyBehavior : MonoBehaviour
 
     [Header("Enemy Movement Settings")]
     public float speed;
-    public float stoppingDistance;
-    public float retreatDistance;
+    //stopingDistance must be smaller than retreatDistance in order for the Enemy to avoid player
+    [Range(0, 10)] public float stoppingDistance;
+    [Range(0, 10)] public float retreatDistance;
+    [Range(0, 10)] public float moveBackAmount = 1f;
 
     private Rigidbody rb;
 
     [Header("Enemy Field Of View Settings")]
-    [Range(0, 100)] //Adjust the range/slider based on the size of your character
+    [Range(0, 100)] // Adjust the range/slider based on the size of your character
     public float radius;
     [Range(0,360)]
     public float angle;
 
     [Header("Enemy Responding Time Settings")]
     [Range(0, 1)] public float chasingDelay;
-    [Range(0, 1)] public float stoppingDelay;
     [Range(0, 1)] public float retreatDelay;
 
     [Header("Layer Masks")]
@@ -103,7 +104,6 @@ public class EnemyBehavior : MonoBehaviour
     {
   
         WaitForSeconds chasingWaitTime = new WaitForSeconds(chasingDelay);
-        WaitForSeconds stoppingWaitTime = new WaitForSeconds(stoppingDelay);
         WaitForSeconds retreatWaitTime = new WaitForSeconds(retreatDelay);
 
         if (Vector3.Distance(transform.position, playerRef.transform.position) > stoppingDistance)
@@ -113,13 +113,13 @@ public class EnemyBehavior : MonoBehaviour
         }
         else if (Vector3.Distance(transform.position, playerRef.transform.position) < stoppingDistance && Vector3.Distance(transform.position, playerRef.transform.position) > retreatDistance)
         {
-            yield return stoppingWaitTime;
+            //yield return stoppingWaitTime;
             transform.position = this.transform.position;
         }
         else if (Vector3.Distance(transform.position, playerRef.transform.position) < retreatDistance)
         {
             yield return retreatWaitTime;
-            transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, -speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, -speed * moveBackAmount * Time.deltaTime);
         }
 
     }
