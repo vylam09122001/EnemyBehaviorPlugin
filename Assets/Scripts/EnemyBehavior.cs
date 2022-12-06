@@ -31,7 +31,7 @@ public class EnemyBehavior : MonoBehaviour
         rb = this.GetComponent<Rigidbody>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (canSeePlayer)
         {
@@ -40,7 +40,7 @@ public class EnemyBehavior : MonoBehaviour
             Quaternion rot = Quaternion.LookRotation(lookVector);
             transform.rotation = Quaternion.Slerp(transform.rotation, rot, 1);
 
-            EnemyMovement();
+            StartCoroutine(EnemyMovement());
         }
         
 
@@ -57,6 +57,7 @@ public class EnemyBehavior : MonoBehaviour
             FOVCheck();
         }
     }
+
 
     private void FOVCheck()
     {
@@ -89,21 +90,29 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
-    void EnemyMovement()
+    private IEnumerator EnemyMovement()
     {
+        float delay = .5f;
+        WaitForSeconds wait = new WaitForSeconds(delay);
+
         if (Vector3.Distance(transform.position, playerRef.transform.position) > stoppingDistance)
         {
+            yield return wait;
             transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, speed * Time.deltaTime);
         }
         else if (Vector3.Distance(transform.position, playerRef.transform.position) < stoppingDistance && Vector3.Distance(transform.position, playerRef.transform.position) > retreatDistance)
         {
+            yield return wait;
             transform.position = this.transform.position;
         }
         else if (Vector3.Distance(transform.position, playerRef.transform.position) < retreatDistance)
         {
+            yield return wait;
             transform.position = Vector3.MoveTowards(transform.position, playerRef.transform.position, -speed * Time.deltaTime);
         }
+
     }
+
 
     
 
